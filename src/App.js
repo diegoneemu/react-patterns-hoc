@@ -1,25 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import BlogPost from "./Components/BlogPost";
+import withSubscription from "./Components/withSubscription";
+import CommentList from "./Components/CommentList";
 
 function App() {
+  const BlogPostWithSubscription = withSubscription(
+    BlogPost,
+    (Datasource, props) => {
+      return Datasource.BlogPost.getBlogPost(props.id);
+    }
+  );
+
+  const CommentListWithSubscription = withSubscription(
+    CommentList,
+    Datasource => {
+      return Datasource.Comments.getComments();
+    }
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="App">
+        <BlogPost id="a1" />
+        <CommentList />
+      </div>
+      <div>
+        <BlogPostWithSubscription id={"a1"} />
+        <CommentListWithSubscription />
+      </div>
+    </>
   );
 }
 
